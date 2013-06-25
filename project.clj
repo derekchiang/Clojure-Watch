@@ -1,4 +1,4 @@
-(defproject clojure-watch "0.1.2"
+(defproject clojure-watch "0.1.3"
   :description "A library for watching file system events."
   :url "https://github.com/derekchiang/Clojure-Watch"
   :license {:name "WTFPL"
