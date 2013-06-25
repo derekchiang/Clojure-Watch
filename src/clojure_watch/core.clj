@@ -1,8 +1,6 @@
 (ns clojure-watch.core
   (:require [clojure.contrib.import-static :as import-static]))
 
-(use '[clojure.core.match :only (match)])
-
 (import '(java.nio.file WatchService Paths FileSystems))
 (import-static/import-static java.nio.file.StandardWatchEventKinds
                              ENTRY_CREATE
@@ -11,6 +9,7 @@
 
 (defn register [{:keys [path event-types callback options] :as spec}
                 watcher keys]
+  ""
   (letfn [(register-helper
            [{:keys [path event-types callback options]} watcher keys]
            (let [; make-array is needed because Paths/get is a variadic method
@@ -19,10 +18,10 @@
                  ; the end.
                  dir (Paths/get path (make-array String 0))
                  types (reduce (fn [acc type]
-                                 (match type
-                                        :create (conj acc ENTRY_CREATE)
-                                        :delete (conj acc ENTRY_DELETE)
-                                        :modify (conj acc ENTRY_MODIFY)))
+                                 (case type
+                                   :create (conj acc ENTRY_CREATE)
+                                   :delete (conj acc ENTRY_DELETE)
+                                   :modify (conj acc ENTRY_MODIFY)))
                                []
                                event-types)
                  key (.register dir watcher (into-array types))]
@@ -54,10 +53,10 @@
           keys (reduce (fn [keys spec]
                          (register spec watcher keys)) {} specs)]
       (letfn [(kind-to-key [kind]
-                           (match kind
-                                  "ENTRY_CREATE" :create
-                                  "ENTRY_MODIFY" :modify
-                                  "ENTRY_DELETE" :delete))
+                           (case kind
+                             "ENTRY_CREATE" :create
+                             "ENTRY_MODIFY" :modify
+                             "ENTRY_DELETE" :delete))
               (watch [watcher keys]
                      (let [key (.take watcher)
                            [dir callback] (keys key)]
@@ -66,7 +65,7 @@
                            (let [kind (kind-to-key (.name (.kind event)))
                                  name (.context event)
                                  child (.resolve dir name)
-                                 f (future (callback kind child))]
+                                 f (future (callback kind (str child)))]
                              @f))
                          (.reset key)
                          (recur watcher keys))))]
