@@ -7,7 +7,7 @@ The most user-friendly file-system watch library written in Clojure, built on to
 Firstly, add this to your dependencies:
 
 ```clojure
-[clojure-watch "0.1.0"]
+[clojure-watch "LATEST"]
 ```
 
 Example:
