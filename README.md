@@ -1,6 +1,6 @@
 # clojure-watch
 
-The most user-friendly file-system watch library, built on top of [Java 7 WatchEvent API](http://docs.oracle.com/javase/tutorial/essential/io/notification.html).
+The most user-friendly file-system watch library, built on top of the [Java 7 WatchEvent API](http://docs.oracle.com/javase/tutorial/essential/io/notification.html).
 
 ## Usage
 
