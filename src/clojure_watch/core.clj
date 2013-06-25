@@ -37,13 +37,15 @@
                  {:keys [path event-types callback options] :as spec}]
               (if (:recursive options)
                 (let [f (clojure.java.io/file path)
-                      fs (file-seq f)]
-                  (reduce (fn [acc file]
-                            (if (.isDirectory file)
-                              (conj acc
-                                    (assoc spec :path (str file)))
-                              acc))
-                          acc fs))
+                      fs (file-seq f)
+                      acc (ref acc)]
+                  (do
+                    (doall (pmap (fn [file]
+                                   (if (.isDirectory file)
+                                     (dosync
+                                      (commute acc
+                                               #(conj % (assoc spec :path (str file))))))) fs))
+                    (deref acc)))
                 (conj acc spec)))
             []
             specs))]
