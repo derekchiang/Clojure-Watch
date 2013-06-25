@@ -65,8 +65,9 @@
                          (doseq [event (.pollEvents key)]
                            (let [kind (kind-to-key (.name (.kind event)))
                                  name (.context event)
-                                 child (.resolve dir name)]
-                             (callback kind child)))
+                                 child (.resolve dir name)
+                                 f (future (callback kind child))]
+                             @f))
                          (.reset key)
                          (recur watcher keys))))]
         (watch watcher keys)))))
