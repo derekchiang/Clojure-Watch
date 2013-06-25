@@ -1,7 +1,7 @@
 (ns clojure-watch.core
-  (:require [clojure.contrib.import-static :as import-static]))
+  (:require [clojure.contrib.import-static :as import-static])
+  (:import (java.nio.file WatchService Paths FileSystems)))
 
-(import '(java.nio.file WatchService Paths FileSystems))
 (import-static/import-static java.nio.file.StandardWatchEventKinds
                              ENTRY_CREATE
                              ENTRY_DELETE
@@ -39,11 +39,14 @@
                       fs (file-seq f)
                       acc (ref acc)]
                   (do
-                    (doall (pmap (fn [file]
-                                   (if (.isDirectory file)
-                                     (dosync
-                                      (commute acc
-                                               #(conj % (assoc spec :path (str file))))))) fs))
+                    (doall
+                     (pmap
+                      (fn [file]
+                        (if (.isDirectory file)
+                          (dosync
+                           (commute
+                            acc
+                            #(conj % (assoc spec :path (str file))))))) fs))
                     (deref acc)))
                 (conj acc spec)))
             []
