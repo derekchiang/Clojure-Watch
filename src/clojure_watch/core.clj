@@ -55,25 +55,18 @@
                          (register spec watcher keys)) {} specs)]
       (letfn [(kind-to-key [kind]
                            (match kind
-                                  ENTRY_CREATE :create
-                                  ENTRY_MODIFY :modify
-                                  ENTRY_DELETE :delete))
+                                  "ENTRY_CREATE" :create
+                                  "ENTRY_MODIFY" :modify
+                                  "ENTRY_DELETE" :delete))
               (watch [watcher keys]
                      (let [key (.take watcher)
                            [dir callback] (keys key)]
                        (do
                          (doseq [event (.pollEvents key)]
-                           (let [kind (kind-to-key (.kind event))
+                           (let [kind (kind-to-key (.name (.kind event)))
                                  name (.context event)
                                  child (.resolve dir name)]
                              (callback kind child)))
                          (.reset key)
                          (recur watcher keys))))]
         (watch watcher keys)))))
-
-;; Example:
-;;
-;; (start-watch [{:path "/home/derek/Desktop"
-;;                :event-types [:create :modify :delete]
-;;                :callback (fn [event filename] (println event filename))
-;;                :options {:recursive true}}])
