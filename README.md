@@ -27,7 +27,7 @@ You call `start-watch` with a collection of specifications.  A specification is 
 1. `:path`.  The path to a directory that you want to watch.
 2. `:event-types`.  A collection of the types of events that you want to watch.  Possible values include `:create`, `modify`, and `create`.
 3. `:callback`.  A callback function to be invoked when an event occurs.  The function should accept two arguments, the first one being the type of the event that happened (`:create`, `:modify`, or `:delete`), and the second one being the full path to the file to which the event happened.
-4. `:options`.  Currently the only available option is `:recursive`.  When it's set to true, all sub-directories will be watched.
+4. `:options`.  Currently the only available option is `:recursive`.  If it's set to true, all sub-directories will be watched.
 
 ## License
 
