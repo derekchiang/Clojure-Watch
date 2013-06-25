@@ -4,6 +4,12 @@ The most user-friendly file-system watch library, built on top of the [Java 7 Wa
 
 ## Usage
 
+Firstly, add this to your dependencies:
+
+```clojure
+[clojure-watch "0.1.0"]
+```
+
 Example:
 
 ```clojure
