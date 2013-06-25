@@ -4,5 +4,6 @@
   :license {:name "WTFPL"
             :url "http://www.wtfpl.net/"}
   :dependencies [[org.clojure/clojure "1.5.1"]
+                 [org.clojure/clojure-contrib "LATEST"]
                  [org.clojure/core.match "LATEST"]])
 
