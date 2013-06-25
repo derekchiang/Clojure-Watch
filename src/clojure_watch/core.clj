@@ -49,7 +49,7 @@
             []
             specs))]
     (let [specs (handle-recursive specs)
-          watcher (.newWatchService (FileSystems/getDefault))
+          watcher (.. FileSystems getDefault newWatchService)
           keys (reduce (fn [keys spec]
                          (register spec watcher keys)) {} specs)]
       (letfn [(kind-to-key [kind]
@@ -62,11 +62,13 @@
                            [dir callback] (keys key)]
                        (do
                          (doseq [event (.pollEvents key)]
-                           (let [kind (kind-to-key (.name (.kind event)))
-                                 name (.context event)
-                                 child (.resolve dir name)
-                                 f (future (callback kind (str child)))]
-                             @f))
+                           (let [kind (kind-to-key (.. event kind name))
+                                 name (->> event
+                                           .context
+                                           (.resolve dir)
+                                           str)]
+                             ; Run callback in another thread
+                             @(future (callback kind name))))
                          (.reset key)
                          (recur watcher keys))))]
         (watch watcher keys)))))
