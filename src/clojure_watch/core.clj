@@ -9,7 +9,6 @@
 
 (defn register [{:keys [path event-types callback options] :as spec}
                 watcher keys]
-  ""
   (letfn [(register-helper
            [{:keys [path event-types callback options]} watcher keys]
            (let [; make-array is needed because Paths/get is a variadic method
@@ -33,7 +32,8 @@
            [specs]
            (reduce
             (fn [acc
-                 {:keys [path event-types callback options] :as spec}]
+                 {:keys [path event-types callback options bootstrap] :as spec}]
+              (bootstrap path)
               (if (:recursive options)
                 (let [f (clojure.java.io/file path)
                       fs (file-seq f)
