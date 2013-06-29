@@ -33,7 +33,8 @@
            (reduce
             (fn [acc
                  {:keys [path event-types callback options bootstrap] :as spec}]
-              (bootstrap path)
+              (if bootstrap
+                (bootstrap path))
               (if (:recursive options)
                 (let [f (clojure.java.io/file path)
                       fs (file-seq f)
