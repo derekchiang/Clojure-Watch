@@ -2,15 +2,19 @@
 
 The most user-friendly file-system watch library written in Clojure, built on top of the [Java 7 WatchEvent API](http://docs.oracle.com/javase/tutorial/essential/io/notification.html).
 
-## Usage
+## Installation
 
-Firstly, add this to your dependencies:
+Add this to your dependencies:
 
 ```clojure
 [clojure-watch "LATEST"]
 ```
 
-Example:
+Check out [Clojars](https://clojars.org/clojure-watch) for more specific installation instructions. 
+
+## Usage
+
+An example:
 
 ```clojure
 (ns clojure-watch.example
