@@ -1,11 +1,9 @@
 (ns clojure-watch.core
-  (:require [clojure.contrib.import-static :as import-static])
   (:import (java.nio.file WatchService Paths FileSystems)))
 
-(import-static/import-static java.nio.file.StandardWatchEventKinds
-                             ENTRY_CREATE
-                             ENTRY_DELETE
-                             ENTRY_MODIFY)
+(def ENTRY_CREATE java.nio.file.StandardWatchEventKinds/ENTRY_CREATE)
+(def ENTRY_DELETE java.nio.file.StandardWatchEventKinds/ENTRY_DELETE)
+(def ENTRY_MODIFY java.nio.file.StandardWatchEventKinds/ENTRY_MODIFY)
 
 (defn register [{:keys [path event-types callback options] :as spec}
                 watcher keys]
@@ -74,5 +72,8 @@
                              ; Run callback in another thread
                              @(future (callback kind name))))
                          (.reset key)
-                         (recur watcher keys))))]
-        (watch watcher keys)))))
+                         (recur watcher keys))))
+              (close-watcher []
+                (.close watcher))]
+        (future (watch watcher keys))
+        close-watcher))))
