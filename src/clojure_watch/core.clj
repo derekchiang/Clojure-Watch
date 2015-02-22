@@ -21,7 +21,12 @@
                                    :modify (conj acc ENTRY_MODIFY)))
                                []
                                event-types)
-                 key (.register dir watcher (into-array types))]
+
+                 modifiers (doto (make-array java.nio.file.WatchEvent$Modifier 1)
+                             (aset 0 com.sun.nio.file.SensitivityWatchEventModifier/HIGH))
+
+                 key (.register dir watcher (into-array types) modifiers)]
+
              (assoc keys key [dir callback])))]
     (register-helper spec watcher keys)))
 
