@@ -25,7 +25,7 @@
                  modifier  (try
                              (let [c (Class/forName "com.sun.nio.file.SensitivityWatchEventModifier")
                                    f (.getField c "HIGH")]
-                               (.get c f))
+                               (.get f c))
                              (catch Exception e))
 
                  modifiers (when modifier
