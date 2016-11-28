@@ -84,8 +84,9 @@
                                            (.resolve dir)
                                            str)]
                              ; Run callback in another thread
-                             @(future (callback kind name))))
-                         (.reset key)
+                             (future (do 
+                               (callback kind name)
+                               (.reset key)))))
                          (recur watcher keys))))
               (close-watcher []
                 (.close watcher))]
