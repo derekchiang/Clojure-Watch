@@ -39,12 +39,14 @@ You call `start-watch` with a collection of specifications.  A specification is 
 
 `start-watch` returns a function that can be called to stop the watch.  For example:
 
+```clojure
 (let [stop-watch (start-watch [{
     :path "/some/valid/path"
     :event-types [:create :modify :delete]
     :callback (fn [event filename] (println event filename))}])] ; start the watch
   (Thread/sleep 20000) ; manipulate files on the path
   (stop-watch)) ; stop the watch
+  ```
 
 ## License
 
